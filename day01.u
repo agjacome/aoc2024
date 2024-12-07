@@ -1,35 +1,41 @@
-day01.parseLine : Text -> {Exception} (Nat, Nat)
-day01.parseLine = Text.words >> List.map Nat.fromTextOrFail >> cases
+namespace day01
+
+parseLine : Text -> {Exception} (Nat, Nat)
+parseLine = Text.words >> List.map Nat.fromTextOrFail >> cases
     [left, right] -> (left, right)
     numbers       -> Exception.raise (Generic.failure "Invalid line format" numbers)
 
-day01.parseInput : Text -> {Exception} ([Nat], [Nat])
-day01.parseInput = Text.lines >> List.map day01.parseLine >> List.unzip
+parseInput : Text -> {Exception} ([Nat], [Nat])
+parseInput = Text.lines >> List.map parseLine >> List.unzip
 
-day01.part1.solve : Text -> {Exception} Nat
-day01.part1.solve =
-    day01.parseInput
+part1.solve : Text -> {Exception} Text
+part1.solve =
+    parseInput
         >> Tuple.bimap List.sort
         >> Function.uncurry (List.zipWith Nat.diff)
         >> Nat.sum
+        >> Nat.toText
 
-day01.part2.solve : Text -> {Exception} Nat
-day01.part2.solve input =
-    (lefts, rightFreqs) = day01.parseInput input |> Tuple.second NatBag.fromList
-    List.map (left -> (NatBag.count left rightFreqs) * left) lefts |> Nat.sum
+part1.debug : '{IO, Exception} ()
+part1.debug = do
+    getInputText (Day 1) |> part1.solve |> IO.console.printLine
 
-day01.debug : '{IO, Exception} ()
-day01.debug = do
-    _ = getInputText (Day 1) |> day01.part1.solve |> Debug.tap "part1"
-    _ = getInputText (Day 1) |> day01.part2.solve |> Debug.tap "part2"
-    ()
+part1.submit : '{IO, Exception} ()
+part1.submit = do
+    submitSolution (Day 1) (Part 1) part1.solve
 
-day01.part1 : '{IO, Exception} ()
-day01.part1 = do
-  solve =  day01.part1.solve >> Nat.toText
-  submitSolution (Day 1) (Part 1) solve
+part2.solve : Text -> {Exception} Text
+part2.solve =
+    parseInput
+        >> Tuple.second NatBag.fromList
+        >> cases (lefts, rightFreqs) -> List.map (left -> (NatBag.count left rightFreqs) * left) lefts
+        >> Nat.sum
+        >> Nat.toText
 
-day01.part2 : '{IO, Exception} ()
-day01.part2 = do
-  solve =  day01.part2.solve >> Nat.toText
-  submitSolution (Day 1) (Part 2) solve
+part2.debug : '{IO, Exception} ()
+part2.debug = do
+    getInputText (Day 1) |> part2.solve |> IO.console.printLine
+
+part2.submit : '{IO, Exception} ()
+part2.submit = do
+    submitSolution (Day 1) (Part 2) day01.part2.solve

@@ -10,5 +10,5 @@ https://share.unison-lang.org/@agjacome/advent-of-code-2024/code/main/latest
 $ nix develop
 
 $ ucm
-> run day01.debug
+> run day01.part1.debug
 ```
