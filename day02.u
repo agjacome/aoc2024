@@ -1,5 +1,8 @@
 namespace day02
 
+currentDay : Day
+currentDay = Day 2
+
 parseLine : Text -> [Int]
 parseLine = Text.words >> List.filterMap Int.fromText
 
@@ -23,10 +26,10 @@ part1.solve =
     >> Nat.toText
 
 part1.print : '{IO, Exception} ()
-part1.print = do printSolution (Day 2) part1.solve
+part1.print = do printSolution currentDay part1.solve
 
 part1.submit : '{IO, Exception} ()
-part1.submit = do submitSolution (Day 2) (Part 1) part1.solve
+part1.submit = do submitSolution currentDay (Part 1) part1.solve
 
 part2.solve : Text -> Text
 part2.solve =
@@ -35,7 +38,7 @@ part2.solve =
     >> Nat.toText
 
 part2.print : '{IO, Exception} ()
-part2.print = do printSolution (Day 2) part2.solve
+part2.print = do printSolution currentDay part2.solve
 
 part2.submit : '{IO, Exception} ()
-part2.submit = do submitSolution (Day 2) (Part 2) part2.solve
+part2.submit = do submitSolution currentDay (Part 2) part2.solve

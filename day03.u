@@ -1,0 +1,49 @@
+namespace day03
+
+currentDay : Day
+currentDay = Day 3
+
+type Instruction =
+  Multiply Nat Nat
+
+Instruction.run : Instruction -> Nat
+Instruction.run =
+  cases Multiply a b -> a * b
+
+Instruction.Multiply.parse : Text -> Text -> Instruction
+Instruction.Multiply.parse a b =
+  Multiply
+    (Nat.fromText a |> Optional.getOrBug "invalid input")
+    (Nat.fromText b |> Optional.getOrBug "invalid input")
+
+Instruction.Multiply.expression : Pattern Text
+Instruction.Multiply.expression =
+  Pattern.join
+    [ Text.patterns.literal "mul("
+    , Pattern.capture (Pattern.some Text.patterns.digit)
+    , Text.patterns.literal ","
+    , Pattern.capture (Pattern.some Text.patterns.digit)
+    , Text.patterns.literal ")"
+    ]
+
+parseInput : Text -> [Instruction]
+parseInput input =
+  loop accumulator input =
+    if Text.size input == 0 then
+      accumulator
+    else
+      Pattern.run Instruction.Multiply.expression input |> cases
+        None               -> loop accumulator (Text.drop 1 input)
+        Some([a, b], rest) -> loop (accumulator :+ (Instruction.Multiply.parse a b)) rest
+        _                  -> bug "invalid input"
+
+  loop [] input
+
+part1.solve : Text -> Text
+part1.solve = parseInput >> List.map Instruction.run >> Nat.sum >> Nat.toText
+
+part1.print : '{IO, Exception} ()
+part1.print = do printSolution currentDay part1.solve
+
+part1.submit : '{IO, Exception} ()
+part1.submit = do submitSolution currentDay (Part 1) part1.solve
