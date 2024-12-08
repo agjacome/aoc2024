@@ -1,12 +1,12 @@
 namespace day01
 
-parseLine : Text -> Optional (Nat, Nat)
-parseLine = Text.words >> List.map Nat.fromText >> cases
-  [Some left, Some right] -> Some (left, right)
-  _                       -> None
+parseLine : Text -> (Nat, Nat)
+parseLine = Text.words >> List.filterMap Nat.fromText >> cases
+  [left, right] -> (left, right)
+  _             -> bug "invalid input"
 
 parseInput : Text -> ([Nat], [Nat])
-parseInput = Text.lines >> List.filterMap parseLine >> List.unzip
+parseInput = Text.lines >> List.map parseLine >> List.unzip
 
 part1.solve : Text -> Text
 part1.solve =

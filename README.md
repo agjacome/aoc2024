@@ -18,9 +18,8 @@ $ ucm
 From Unison's [Advent of Code
 template](https://share.unison-lang.org/@unison/advent-of-code):
 
->  The only required configuration is an Advent of Code API token. It is used
->  to fetch user-specific input for a problem and to submit answers for a
->  problem.
+>  The only required configuration is an Advent of Code API token. It is used to
+>  fetch user-specific input for a problem and to submit answers for a problem.
 >
 > You can get your API token by logging into [Advent of
 > Code](https://adventofcode.com/) in your browser, finding the cookie named
@@ -29,6 +28,6 @@ template](https://share.unison-lang.org/@unison/advent-of-code):
 > By default, the Advent of Code client will look for an API token in the
 > following locations (in this order):
 > 
-> * The `ADVENT_OF_CODE_TOKEN` environment variable
-> * A file located at `$XDG_DATA_HOME/unison-advent-of-code/.token.txt`
-> * A file located at `$HOME/.local/share/unison-advent-of-code/.token.txt`
+> * The `ADVENT_OF_CODE_TOKEN` environment variable * A file located at
+>   `$XDG_DATA_HOME/unison-advent-of-code/.token.txt` * A file located at
+>   `$HOME/.local/share/unison-advent-of-code/.token.txt`

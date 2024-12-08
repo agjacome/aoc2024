@@ -1,0 +1,26 @@
+namespace day02
+
+parseLine : Text -> [Int]
+parseLine = Text.words >> List.filterMap Int.fromText
+
+parseInput : Text -> [[Int]]
+parseInput = Text.lines >> List.map parseLine
+
+safeLevels : [Int] -> Boolean
+safeLevels levels =
+  differences = List.slidingPairs levels |> List.map (cases (x, y) -> x - y)
+  allIncreasing = List.all (d -> d >= +1 && d <= +3) differences
+  allDecreasing = List.all (d -> d <= -1 && d >= -3) differences
+  allIncreasing || allDecreasing
+
+part1.solve : Text -> Text
+part1.solve =
+  parseInput
+    >> List.count safeLevels
+    >> Nat.toText
+
+part1.print : '{IO, Exception} ()
+part1.print = do printSolution (Day 2) part1.solve
+
+part1.submit : '{IO, Exception} ()
+part1.submit = do submitSolution (Day 2) (Part 1) part1.solve
