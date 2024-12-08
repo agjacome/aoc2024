@@ -13,6 +13,9 @@ safeLevels levels =
   allDecreasing = List.all (d -> d <= -1 && d >= -3) differences
   allIncreasing || allDecreasing
 
+removeSingleLevel : [Int] -> [[Int]]
+removeSingleLevel levels = List.mapIndexed (index _ -> List.deleteAt index levels) levels
+
 part1.solve : Text -> Text
 part1.solve =
   parseInput
@@ -24,3 +27,15 @@ part1.print = do printSolution (Day 2) part1.solve
 
 part1.submit : '{IO, Exception} ()
 part1.submit = do submitSolution (Day 2) (Part 1) part1.solve
+
+part2.solve : Text -> Text
+part2.solve =
+  parseInput
+    >> List.count (levels -> safeLevels levels || (removeSingleLevel levels |> List.any safeLevels))
+    >> Nat.toText
+
+part2.print : '{IO, Exception} ()
+part2.print = do printSolution (Day 2) part2.solve
+
+part2.submit : '{IO, Exception} ()
+part2.submit = do submitSolution (Day 2) (Part 2) part2.solve
