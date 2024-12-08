@@ -1,41 +1,37 @@
 namespace day01
 
-parseLine : Text -> {Exception} (Nat, Nat)
-parseLine = Text.words >> List.map Nat.fromTextOrFail >> cases
-    [left, right] -> (left, right)
-    numbers       -> Exception.raise (Generic.failure "Invalid line format" numbers)
+parseLine : Text -> Optional (Nat, Nat)
+parseLine = Text.words >> List.map Nat.fromText >> cases
+  [Some left, Some right] -> Some (left, right)
+  _                       -> None
 
-parseInput : Text -> {Exception} ([Nat], [Nat])
-parseInput = Text.lines >> List.map parseLine >> List.unzip
+parseInput : Text -> ([Nat], [Nat])
+parseInput = Text.lines >> List.filterMap parseLine >> List.unzip
 
-part1.solve : Text -> {Exception} Text
+part1.solve : Text -> Text
 part1.solve =
-    parseInput
-        >> Tuple.bimap List.sort
-        >> Function.uncurry (List.zipWith Nat.diff)
-        >> Nat.sum
-        >> Nat.toText
+  parseInput
+    >> Tuple.bimap List.sort
+    >> Function.uncurry (List.zipWith Nat.diff)
+    >> Nat.sum
+    >> Nat.toText
 
-part1.debug : '{IO, Exception} ()
-part1.debug = do
-    getInputText (Day 1) |> part1.solve |> IO.console.printLine
+part1.print : '{IO, Exception} ()
+part1.print = do printSolution (Day 1) part1.solve
 
 part1.submit : '{IO, Exception} ()
-part1.submit = do
-    submitSolution (Day 1) (Part 1) part1.solve
+part1.submit = do submitSolution (Day 1) (Part 1) part1.solve
 
-part2.solve : Text -> {Exception} Text
+part2.solve : Text -> Text
 part2.solve =
-    parseInput
-        >> Tuple.second NatBag.fromList
-        >> cases (lefts, rightFreqs) -> List.map (left -> (NatBag.count left rightFreqs) * left) lefts
-        >> Nat.sum
-        >> Nat.toText
+  parseInput
+    >> Tuple.second NatBag.fromList
+    >> cases (lefts, rightFreqs) -> List.map (left -> (NatBag.count left rightFreqs) * left) lefts
+    >> Nat.sum
+    >> Nat.toText
 
-part2.debug : '{IO, Exception} ()
-part2.debug = do
-    getInputText (Day 1) |> part2.solve |> IO.console.printLine
+part2.print : '{IO, Exception} ()
+part2.print = do printSolution (Day 1) part2.solve
 
 part2.submit : '{IO, Exception} ()
-part2.submit = do
-    submitSolution (Day 1) (Part 2) day01.part2.solve
+part2.submit = do submitSolution (Day 1) (Part 2) day01.part2.solve

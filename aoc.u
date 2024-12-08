@@ -1,0 +1,16 @@
+namespace aoc
+
+currentYear : Year
+currentYear = Year 2024
+
+getInputText : Day -> {IO, Exception} Text
+getInputText day =
+  defaultHandler do input currentYear day
+
+printSolution : Day -> (Text -> {g} Text) -> {g, IO, Exception} ()
+printSolution day solve =
+  defaultHandler do getInputText day |> solve |> IO.console.printLine
+
+submitSolution : Day -> Part -> (Text ->{g} Text) ->{g, IO, Exception} ()
+submitSolution day part solve =
+  defaultHandler do solveAndSubmit presentYear day part solve
